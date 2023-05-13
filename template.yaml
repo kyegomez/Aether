@@ -1,0 +1,68 @@
+# Specify the Kubernetes API version and the kind of resource being defined (Deployment)
+apiVersion: apps/v1
+kind: Deployment
+
+# Provide metadata for the deployment, including the name
+metadata:
+  name: training-deployment
+
+# Define the specifications for the deployment
+spec:
+  # Set the number of replicas (desired number of pods) for the deployment
+  replicas: 3
+
+  # Specify the selector that matches labels to identify the pods controlled by this deployment
+  selector:
+    matchLabels:
+      app: training-app
+
+  # Define the template for the pods created by this deployment
+  template:
+    metadata:
+      # Assign labels to the pods
+      labels:
+        app: training-app
+
+    spec:
+      # Configure the containers within the pods
+      containers:
+        - name: training-container
+          # Specify the Docker image to be used
+          image: your-docker-image:latest
+
+          # Set resource requirements (CPU and memory limits and requests) for the container
+          resources:
+            limits:
+              cpu: 2
+              memory: 4Gi
+            requests:
+              cpu: 1
+              memory: 2Gi
+
+          # Define environment variables for the container
+          env:
+            - name: DATA_PATH
+              value: /data/dataset
+            - name: BATCH_SIZE
+              value: "32"
+            - name: LOGGING_ENABLED
+              value: "true"
+
+          # Mount a volume to the container
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data
+
+      # Define volumes for the pod
+      volumes:
+        - name: data-volume
+          # Specify a persistent volume claim (PVC) to be used as the volume
+          persistentVolumeClaim:
+            claimName: data-pvc
+
+  # Specify the deployment update strategy (RollingUpdate in this case)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
