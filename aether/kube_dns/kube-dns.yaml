@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-dns
+data:
+  stubDomains: |
+    {
+      "example.com": ["10.0.0.1", "10.0.0.2"]
+    }
+  upstreamNameservers: |
+    ["8.8.8.8", "8.8.4.4"]

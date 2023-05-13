@@ -1,0 +1,15 @@
+
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+spec:
+  replicas: 1
+  serviceAccountName: prometheus
+  securityContext:
+    fsGroup: 2000
+  resources:
+    requests:
+      memory: 400Mi
+  ...
+  (Prometheus configuration continues)
